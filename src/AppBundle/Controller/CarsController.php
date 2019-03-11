@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Car;
 use AppBundle\Form\CarType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\Tests\Compiler\C;
 use Symfony\Component\HttpFoundation\Request;
 
 class CarsController extends Controller
@@ -52,16 +53,26 @@ class CarsController extends Controller
                 'This brand does not exist!'
             );
 
-            return $this->redirectToRoute('car_index');
+            return $this->redirectToRoute('car_update', ['id' => $car->id]);
         }
 
         $validatedCar = $this->validate($request);
+
+        if (!$validatedCar) {
+            $this->addFlash(
+                'error',
+                'Wrong data.'
+            );
+
+            return $this->redirectToRoute('car_update', ['id' => $car->getId()]);
+        }
 
         $car->setBrand($validatedCar->getBrand());
         $car->setModel($validatedCar->getModel());
         $car->setEngine($validatedCar->getEngine());
         $car->setColor($validatedCar->getColor());
         $car->setPrice($validatedCar->getPrice());
+        $car->setImage($validatedCar->getImage());
         $em->flush();
 
         $this->addFlash(
@@ -69,7 +80,7 @@ class CarsController extends Controller
             'The record was saved successfully.'
         );
 
-        return $this->redirectToRoute('car_index');
+        return $this->redirectToRoute('car_update', ['id' => $car->getId()]);
     }
 
     public function postAction(Request $request)
@@ -91,25 +102,20 @@ class CarsController extends Controller
     private function validate($request)
     {
         $car = new Car();
-
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
+        $errors = !$form->isValid();
 
-        $validator = $this->get('validator');
-        $errors = $validator->validate($car);
-
-        if (!$form->isValid() && $errors->count()) {
-            return $this->render('car/index.html.twig', [
-                'form' => $form->createView()
-            ]);
+        if ($errors) {
+            return null;
         }
 
-        $image = $car->getImage();
-        if ($image) {
-            $file = $car->getImage();
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+        $image = $request->files->get('appbundle_car')['image'] ?? null;
 
-            $file->move(
+        if ($image) {
+            $fileName = md5(uniqid()).'.'.$image->guessExtension();
+
+            $image->move(
                 $this->getParameter('images_directory'),
                 $fileName
             );
