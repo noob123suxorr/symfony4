@@ -1,0 +1,90 @@
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+engine_index:
+  path:     /engine
+  methods: [GET]
+  defaults: { _controller: AppBundle:Engine:index }
+engine_update:
+  path:     /engine/{id}
+  methods: [GET]
+  defaults: { _controller: AppBundle:Engine:update}
+engine_post:
+  path:     /engine
+  methods: [post]
+  defaults: { _controller: AppBundle:Engine:post }
+engine_process_update:
+  path:     /engine/{id}
+  methods: [POST]
+  defaults: { _controller: AppBundle:Engine:processUpdate}
+
+brand_index:
+  path:     /brand
+  methods: [GET]
+  defaults: { _controller: AppBundle:Brand:index }
+brand_post:
+  path:     /brand
+  methods: [POST]
+  defaults: { _controller: AppBundle:Brand:post }
+brand_update:
+  path:     /brand/{id}
+  methods: [GET]
+  defaults: { _controller: AppBundle:Brand:update}
+brand_process_update:
+  path:     /brand/{id}
+  methods: [POST]
+  defaults: { _controller: AppBundle:Brand:processUpdate}
+
+model_index:
+  path:     /model
+  methods: [GET]
+  defaults: { _controller: AppBundle:Model:index }
+model_update:
+  path:     /model/{id}
+  methods: [GET]
+  defaults: { _controller: AppBundle:Model:update}
+model_post:
+  path:     /model
+  methods: [post]
+  defaults: { _controller: AppBundle:Model:post }
+model_process_update:
+  path:     /model/{id}
+  methods: [POST]
+  defaults: { _controller: AppBundle:Model:processUpdate}
+
+
+color_index:
+  path:     /color
+  methods: [GET]
+  defaults: { _controller: AppBundle:Color:index }
+color_update:
+  path:     /color/{id}
+  methods: [GET]
+  defaults: { _controller: AppBundle:Color:update}
+color_post:
+  path:     /color
+  methods: [post]
+  defaults: { _controller: AppBundle:Color:post }
+color_process_update:
+  path:     /color/{id}
+  methods: [POST]
+  defaults: { _controller: AppBundle:Color:processUpdate}
+
+
+car_index:
+  path:     /car
+  methods: [GET]
+  defaults: { _controller: AppBundle:Cars:index }
+car_update:
+  path:     /car/{id}
+  methods: [GET]
+  defaults: { _controller: AppBundle:Cars:update}
+car_post:
+  path:     /car
+  methods: [post]
+  defaults: { _controller: AppBundle:Cars:post }
+car_process_update:
+  path:     /car/{id}
+  methods: [POST]
+  defaults: { _controller: AppBundle:Cars:processUpdate}

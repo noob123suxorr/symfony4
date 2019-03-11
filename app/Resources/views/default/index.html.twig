@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="wrapper" style="padding-top: 60px;">
+
+        <section class="text-center padding-top100 padding-bottom100 dashboard-image"
+                 style="background-image:url('assets/images/sliderbg.jpg'); border-bottom:rgba(0,0,0,0.1) 1px solid;background-attachment: fixed;
+    background-position: bottom;">
+            <div>
+                <h1>
+                    <strong>Buy your new car here</strong>
+                    <h4>EVERYTHING YOU NEED TO BUILD AN AMAZING DEALERSHIP WEBSITE</h4>
+                </h1>
+            </div>
+            <div class="col-md-offset-2 col-md-8" style="box-shadow: -6px 20px 45px rgba(0, 0, 0, .25); padding: 0px">
+                <div class="text-right row">
+                    <div class="col-md-offset-9 bg-primary text-center" style="padding: 5px 10px; margin-right: 50px; margin-left: 50px; font-size: 18px">
+                        <span>FOUND:</span>
+                        <span id="carsCount">{{ cars | length }}</span>
+                    </div>
+                </div>
+                <form id="searchForm" class="white-row" method="post" action="/">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Brand</label>
+                                    <select id="selectBrand" name="brand" class="form-control">
+                                        <option>-</option>
+                                        {% for brand in brands %}
+                                            {% if app.request.get('brand') == brand.id %}
+                                                <option value="{{ brand.id }}" selected>{{ brand.name }}</option>
+                                            {% else %}
+                                                <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Model</label>
+                                    <select id="selectModel" name="model" class="form-control">
+                                        <option selected>-</option>
+                                        {% for model in models %}
+                                            {% if app.request.get('model') == model.id %}
+                                                <option value="{{ model.id }}" selected data-brand="{{ model.brandId.id }}">{{ model.name }}</option>
+                                            {% else %}
+                                                <option value="{{ model.id }}" data-brand="{{ model.brandId.id }}">{{ model.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <label for="amount">Price range:</label>
+                                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                <input type="text" name="min" value="{{ app.request.get('min') }}" hidden readonly>
+                                <input type="text" name="maxSetted" value="{{ app.request.get('max') }}" hidden readonly>
+                                <input type="text" name="max" value="{{ max }}" hidden readonly>
+                            </p>
+                            <div id="progressBar" style="margin-top: 35px"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Engine</label>
+                                    <select name="engine" class="form-control">
+                                        <option>-</option>
+                                        {% for engine in engines %}
+                                            {% if app.request.get('engine') == engine.id %}
+                                                <option selected value="{{ engine.id }}">{{ engine.type }}</option>
+                                            {% else %}
+                                                <option value="{{ engine.id }}">{{ engine.type }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Color</label>
+                                    <select name="color" class="form-control">
+                                        <option>-</option>
+                                        {% for color in colors %}
+                                            {% if app.request.get('color') == color.id %}
+                                                <option selected value="{{ color.id }}">{{ color.name }}</option>
+                                            {% else %}
+                                                <option value="{{ color.id }}">{{ color.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="margin-top: 30px">
+                            <div class="col-md-12 btn-group-vertical">
+                                <input type="submit" value="Search" class="btn btn-primary pull-right push-bottom">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <div style="margin-top: 80px" class="col-md-8 col-md-offset-2 section-header margin-bottom80 text-center">
+            <div class="row text-center">
+                {% for car in cars %}
+                    <div class="col-md-4 col-sm-6 margin-bottom60 ">
+                        <div class="margin-bottom30">
+                            <a class="thumbnail" href="car/{{ car.id }}">
+                                <img class="img-responsive lazy" src='/assets/images/{{ car.image }}' data-original="assets/images/demo/start/default-min.png" alt="" style="display: block;">
+                            </a>
+                        </div>
+
+                        <h4 class="size-15">
+                            <a style="color:#333333;" href="car/{{ car.id }}">Brand: {{ car.brand.name }}, Model: {{ car.model.name }}</a>
+                        </h4>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $( function() {
+            var progressMin = $('form input[name="min"]').val() || 0;
+            var progressMax = $('form input[name="max"]').val() || 1000000;
+            var progressMaxSetted = $('form input[name="maxSetted"]').val();
+
+            $("#progressBar").slider({
+                range: true,
+                min: 0,
+                max: progressMax,
+                values: [ progressMin, progressMaxSetted || progressMax],
+                slide: function( event, ui ) {
+                    $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                    progressMin = ui.values[0];
+                    progressMax = ui.values[1];
+                }
+            });
+
+            $( "#amount" ).val( "$" + $("#progressBar").slider( "values", 0 ) +
+                " - $" + $("#progressBar").slider( "values", 1 ) );
+
+            $('#selectBrand').on('change', function() {
+                $('#selectModel option:not(option[data-brand='+$(this).val()+'])').hide();
+                $('#selectModel option[data-brand='+$(this).val()+']').show();
+            });
+
+            $('#searchForm').on('submit', function (e) {
+                e.preventDefault();
+
+                $('form input[name="min"]').val( progressMin );
+                $('form input[name="max"]').val( progressMax );
+
+                this.submit();
+            });
+        });
+    </script>
+{% endblock %}

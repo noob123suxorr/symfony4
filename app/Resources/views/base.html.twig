@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </head>
+    <body>
+    {#<div class="dropdown show">#}
+        {#<a class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">#}
+            {#Dropdown link#}
+        {#</a>#}
+        {#<ul class="dropdown-menu">#}
+            {#<li><a class="dropdown-item" href="#">Action</a></li>#}
+        {#</ul>#}
+    {#</div>#}
+    <header id="topNav" class="topHead" style="height: 60px;"><!-- remove class="topHead" if no topHead used! -->
+        <div class="container">
+            <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse"
+                    style="margin-top: 0px;">
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="logo" href="/" style="margin-top: -10px; line-height: 50px;">
+                <img src="https://cdn2.iconfinder.com/data/icons/keys-line-style/120/key-27-256.png" alt="Atropos" style="width: 65px">
+            </a>
+            <div class="navbar-collapse nav-main-collapse collapse pull-right topFix" style="margin-top: 6px;">
+                <nav class="nav-main mega-menu">
+                    <ul class="nav nav-pills nav-main scroll-menu" id="topMain">
+                        <li><a href="/">Find Car</a></li>
+                        <li><a href="/car">Add car</a></li>
+                        <li class="dropdown show">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                Cars Elements<i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu hidden-sm hidden-xs">
+                                <li><a href="/engine">Add Engine</a></li>
+                                <li><a href="/brand">Add Brand</a></li>
+                                <li><a href="/model">Add Model</a></li>
+                                <li><a href="/color">Add Color</a></li>
+                            </ul>
+                            <ul class="hidden-lg hidden-md">
+                                <li><a href="/engine">Add Engine</a></li>
+                                <li><a href="/brand">Add Brand</a></li>
+                                <li><a href="/model">Add Model</a></li>
+                                <li><a href="/color">Add Color</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+        {% block body %}{% endblock %}
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

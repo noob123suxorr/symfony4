@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-offset-3 col-md-6" style="margin-top: 60px">
+        {{ form_start(form) }}
+        <h2>Insert <strong>Car</strong></h2>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-8">
+                    <label>Brand:</label>
+                    {{ form_widget(form.brand, {'label': ' ', 'id': 'selectBrand', 'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-md-8">
+                    <label>Model:</label>
+                    {{ form_widget(form.model, {'label': ' ', 'id': 'selectModel', 'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-md-8">
+                    <label>Engine:</label>
+                    {{ form_widget(form.engine, {'label': ' ', 'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-md-8">
+                    <label>Color:</label>
+                    {{ form_widget(form.color,  {'label': ' ', 'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-md-8">
+                    <label>Price:</label>
+                    {{ form_widget(form.price,  {'label': ' ', 'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-md-8">
+                    <label>Image:</label>
+                    {{ form_widget(form.image,  {'label': ' ', 'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                {% if not form.vars.valid %}
+                    <div class="alert alert-error">
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+
+                {% for message in app.flashes('success') %}
+                    <div class="flash-notice alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <input type="submit" value="Insert" class="btn btn-primary pull-right push-bottom" data-loading-text="Loading...">
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $( function() {
+            $('#selectBrand').on('change', function() {
+                $('#selectModel option:not(option[data-brand=' + $(this).val() + '])').hide();
+                $('#selectModel option[data-brand=' + $(this).val() + ']').show();
+            });
+        });
+    </script>
+{% endblock %}
